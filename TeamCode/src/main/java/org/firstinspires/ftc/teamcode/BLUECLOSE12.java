@@ -250,7 +250,7 @@ public class BLUECLOSE12 extends OpMode {
     public pathStates autonomousPathUpdate() {
         switch(pathState){
             case SHOOT_PRE:
-                follower.followPath(paths.preload);
+                follower.followPath(paths.preload, true);
                 pathState = pathStates.PICK_SPIKE1;
                 state = States.REST;
                 break;
@@ -266,7 +266,7 @@ public class BLUECLOSE12 extends OpMode {
                 break;
             case SHOOT_SPIKE1:
                 if(!follower.isBusy()){
-                    follower.followPath(paths.shootspike1);
+                    follower.followPath(paths.shootspike1, true);
                     pathState = pathStates.PICK_SPIKE2;
                     state = States.REST;
                 }
@@ -284,7 +284,7 @@ public class BLUECLOSE12 extends OpMode {
                 break;
             case SHOOT_SPIKE2:
                 if(!follower.isBusy() || driveTime.seconds() > 3){
-                    follower.followPath(paths.shootspike2);
+                    follower.followPath(paths.shootspike2, true);
                     pathState = pathStates.PICK_GATE1;
                     state = States.REST;
                 }
@@ -302,7 +302,7 @@ public class BLUECLOSE12 extends OpMode {
                 break;
             case SHOOT_GATE1:
                 if(!follower.isBusy() || driveTime.seconds() > 3){
-                    follower.followPath(paths.shootgate1);
+                    follower.followPath(paths.shootgate1, true);
                     pathState = pathStates.PARK;
                     state = States.REST;
                 }

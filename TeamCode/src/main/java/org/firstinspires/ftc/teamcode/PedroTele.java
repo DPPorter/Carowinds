@@ -284,9 +284,10 @@ public class PedroTele extends OpMode {
         if (targetAngle > 180)
             targetAngle -= 360;
 
-        double a = -2.99525;
+        double a = -3.3;
+//        double a = -3.122222222222;
         double b = 0.353539;
-        int turretTarget = (int)((targetAngle * a) + b);
+        int turretTarget = (int)((targetAngle * a));
 
         int trueTarget = turretTarget;
 

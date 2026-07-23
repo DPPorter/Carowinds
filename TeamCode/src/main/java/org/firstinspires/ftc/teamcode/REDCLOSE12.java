@@ -29,7 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "BLUE-CLOSE_12", group = "Auto")
+@Autonomous(name = "RED-CLOSE_12", group = "Auto")
 @Configurable // Panels
 public class REDCLOSE12 extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
@@ -67,7 +67,10 @@ public class REDCLOSE12 extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(15.204, 114.400, Math.toRadians(0)));
+        follower.setStartingPose(new Pose(128.796, 114.400, Math.toRadians(180)));
+
+        followerAim = Constants.createFollower(hardwareMap);
+        followerAim.setStartingPose(new Pose(128.796, 114.400, Math.toRadians(180)));
 
         paths = new Paths(follower);// Build paths
 
@@ -132,8 +135,10 @@ public class REDCLOSE12 extends OpMode {
     @Override
     public void loop() {
         follower.update(); // Update Pedro Pathing
+        followerAim.update();
         pathState = autonomousPathUpdate(); // Update autonomous state machine
         robotControl();
+        llReset();
 
         telemetry.addData("VelocityError", veloError);
         telemetry.addData("turretError", turretError);
@@ -151,6 +156,7 @@ public class REDCLOSE12 extends OpMode {
 
 
 
+
     public static class Paths {
         public PathChain preload;
         public PathChain pickspike1;
@@ -163,10 +169,10 @@ public class REDCLOSE12 extends OpMode {
 
         public Paths(Follower follower) {
             preload = follower.pathBuilder().addPath(
-                            new BezierLine(
+                            new BezierCurve(
                                     new Pose(128.796, 114.400),
-
-                                    new Pose(99.481, 86.271)
+                                    new Pose(91.011, 102.507),
+                                    new Pose(92.481, 86.271)
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-10))
 
@@ -174,10 +180,10 @@ public class REDCLOSE12 extends OpMode {
 
             pickspike1 = follower.pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(99.481, 86.271),
-                                    new Pose(129.331, 84.809),
-                                    new Pose(120.707, 78.837),
-                                    new Pose(127.569, 74.619)
+                                    new Pose(92.481, 86.271),
+                                    new Pose(122.331, 84.809),
+                                    new Pose(113.707, 78.837),
+                                    new Pose(120.569, 74.619)
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(-10), Math.toRadians(0))
 
@@ -185,9 +191,9 @@ public class REDCLOSE12 extends OpMode {
 
             shootspike1 = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(127.569, 74.619),
+                                    new Pose(120.569, 74.619),
 
-                                    new Pose(83.751, 71.785)
+                                    new Pose(76.751, 71.785)
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-20))
 
@@ -195,9 +201,9 @@ public class REDCLOSE12 extends OpMode {
 
             pickspike2 = follower.pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(83.751, 71.785),
-                                    new Pose(104.064, 58.304),
-                                    new Pose(123.160, 59.575)
+                                    new Pose(76.751, 71.785),
+                                    new Pose(97.064, 58.304),
+                                    new Pose(116.160, 59.575)
                             )
                     ).setTangentHeadingInterpolation()
 
@@ -205,9 +211,9 @@ public class REDCLOSE12 extends OpMode {
 
             shootspike2 = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(123.160, 59.575),
+                                    new Pose(116.160, 59.575),
 
-                                    new Pose(82.867, 70.017)
+                                    new Pose(75.867, 70.017)
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(5), Math.toRadians(0))
 
@@ -215,9 +221,9 @@ public class REDCLOSE12 extends OpMode {
 
             pickgate1 = follower.pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(82.867, 70.017),
-                                    new Pose(122.685, 51.602),
-                                    new Pose(132.878, 60.669)
+                                    new Pose(75.867, 70.017),
+                                    new Pose(118.685, 51.602),
+                                    new Pose(125.878, 60.669)
                             )
                     ).setTangentHeadingInterpolation()
 
@@ -225,9 +231,9 @@ public class REDCLOSE12 extends OpMode {
 
             shootgate1 = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(132.878, 60.669),
+                                    new Pose(125.878, 60.669),
 
-                                    new Pose(84.260, 71.309)
+                                    new Pose(77.260, 71.309)
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
 
@@ -235,9 +241,9 @@ public class REDCLOSE12 extends OpMode {
 
             park = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(84.260, 71.309),
+                                    new Pose(77.260, 71.309),
 
-                                    new Pose(101.890, 71.309)
+                                    new Pose(94.890, 71.309)
                             )
                     ).setConstantHeadingInterpolation(Math.toRadians(0))
 
@@ -248,11 +254,13 @@ public class REDCLOSE12 extends OpMode {
 
 
 
+
+
     ElapsedTime driveTime = new ElapsedTime();
     public pathStates autonomousPathUpdate() {
         switch(pathState){
             case SHOOT_PRE:
-                follower.followPath(paths.preload);
+                follower.followPath(paths.preload, true);
                 pathState = pathStates.PICK_SPIKE1;
                 state = States.REST;
                 break;
@@ -268,7 +276,7 @@ public class REDCLOSE12 extends OpMode {
                 break;
             case SHOOT_SPIKE1:
                 if(!follower.isBusy()){
-                    follower.followPath(paths.shootspike1);
+                    follower.followPath(paths.shootspike1, true);
                     pathState = pathStates.PICK_SPIKE2;
                     state = States.REST;
                 }
@@ -286,7 +294,7 @@ public class REDCLOSE12 extends OpMode {
                 break;
             case SHOOT_SPIKE2:
                 if(!follower.isBusy() || driveTime.seconds() > 3){
-                    follower.followPath(paths.shootspike2);
+                    follower.followPath(paths.shootspike2, true);
                     pathState = pathStates.PICK_GATE1;
                     state = States.REST;
                 }
@@ -304,7 +312,7 @@ public class REDCLOSE12 extends OpMode {
                 break;
             case SHOOT_GATE1:
                 if(!follower.isBusy() || driveTime.seconds() > 3){
-                    follower.followPath(paths.shootgate1);
+                    follower.followPath(paths.shootgate1, true);
                     pathState = pathStates.PARK;
                     state = States.REST;
                 }
@@ -345,7 +353,7 @@ public class REDCLOSE12 extends OpMode {
         if(results.getBotposeAvgDist() != 0) followerAim.setPose(current);;
     }
 
-    int goalX = 4;
+    int goalX = 140;
     int goalY = 140;
 
     int turretError = 0;
@@ -402,7 +410,7 @@ public class REDCLOSE12 extends OpMode {
 
     private void velocityControl(){
 
-        double distance = Math.sqrt((Math.pow((goalX - follower.getPose().getX()), 2) + Math.pow((goalY - follower.getPose().getY()), 2)));
+        double distance = Math.sqrt((Math.pow((goalX - followerAim.getPose().getX()), 2) + Math.pow((goalY - followerAim.getPose().getY()), 2)));
 
         boolean close = distance <= 80;
 

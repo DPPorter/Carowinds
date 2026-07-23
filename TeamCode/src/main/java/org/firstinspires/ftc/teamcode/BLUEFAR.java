@@ -139,7 +139,7 @@ public class BLUEFAR extends OpMode {
         pathState = autonomousPathUpdate(); // Update autonomous state machine
         robotControl();
 
-//        followerAim.update();
+        followerAim.update();
 
         telemetry.addData("VelocityError", veloError);
         telemetry.addData("turretError", turretError);
@@ -151,6 +151,10 @@ public class BLUEFAR extends OpMode {
 
         telemetry.addData("outTime", outTimer.milliseconds());
         telemetry.addData("thereTime", thereTimer.milliseconds());
+
+        telemetry.addLine();
+
+        telemetry.addData("Pose:", follower.getPose());
     }
 
 
@@ -167,11 +171,100 @@ public class BLUEFAR extends OpMode {
         public PathChain Park;
 
         public Paths(Follower follower) {
+//            Preload = follower.pathBuilder().addPath(
+//                            new BezierLine(
+//                                    new Pose(54.000, 8.000),
+//
+//                                    new Pose(54.011, 12.530)
+//                            )
+//                    ).setConstantHeadingInterpolation(Math.toRadians(90))
+//
+//                    .build();
+//
+//            PickSpike1 = follower.pathBuilder().addPath(
+//                            new BezierCurve(
+//                                    new Pose(54.011, 12.530),
+//                                    new Pose(43.812, 27.428),
+//                                    new Pose(24.055, 35.608)
+//                            )
+//                    ).setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
+//
+//                    .build();
+//
+//            ShootSpike1 = follower.pathBuilder().addPath(
+//
+//                            new BezierLine(
+//                                    new Pose(24.055, 35.608),
+//
+////                                    new Pose(50.630, 12.591)
+//                                    new Pose(51.630, 15.591)
+//                            )
+//                    ).setConstantHeadingInterpolation(Math.toRadians(180))
+//
+//                    .build();
+//
+//
+//
+//            PickHPZone = follower.pathBuilder().addPath(
+//                            new BezierCurve(
+//                                    new Pose(51.630, 15.591),
+//                                    new Pose(36.083, 20.704),
+//                                    new Pose(15.133, 34.572),
+//                                    new Pose(17.014, 10.146)
+//                            )
+//                    ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(205))
+//
+//                    .build();
+//
+//            ShootHPZone = follower.pathBuilder().addPath(
+//                            new BezierLine(
+//                                    new Pose(15.713, 8.751),
+//
+//                                    new Pose(51.630, 15.591)
+//                            )
+//                    ).setLinearHeadingInterpolation(Math.toRadians(205), Math.toRadians(180))
+//
+//                    .build();
+//
+//            PickHPZone2 = follower.pathBuilder().addPath(
+//                            new BezierCurve(
+//                                    new Pose(51.630, 15.591),
+//                                    new Pose(36.083, 20.704),
+//                                    new Pose(15.133, 34.572),
+//                                    new Pose(17.014, 10.146)
+//                            )
+//                    ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(205))
+//
+//                    .build();
+//
+//            ShootHPZone2 = follower.pathBuilder().addPath(
+//                            new BezierLine(
+//                                    new Pose(17.014, 10.146),
+//
+//                                    new Pose(51.630, 15.591)
+//                            )
+//                    ).setLinearHeadingInterpolation(Math.toRadians(205), Math.toRadians(180))
+//
+//                    .build();
+//
+//            Park = follower.pathBuilder().addPath(
+//                            new BezierLine(
+//                                    new Pose(51.630, 15.591),
+//
+//                                    new Pose(50.812, 24)
+//                            )
+//                    ).setConstantHeadingInterpolation(Math.toRadians(180))
+//
+//                    .build();
+
+
+
+
             Preload = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(54.000, 8.000),
+                                    new Pose(54, 8.000),
 
-                                    new Pose(54.011, 12.530)
+                                    new Pose(54, 12.530)
                             )
                     ).setConstantHeadingInterpolation(Math.toRadians(90))
 
@@ -179,9 +272,9 @@ public class BLUEFAR extends OpMode {
 
             PickSpike1 = follower.pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(54.011, 12.530),
-                                    new Pose(43.812, 27.428),
-                                    new Pose(24.055, 35.608)
+                                    new Pose(54, 12.530),
+                                    new Pose(44, 27.428),
+                                    new Pose(24, 35.608)
                             )
                     ).setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
 
@@ -190,77 +283,90 @@ public class BLUEFAR extends OpMode {
             ShootSpike1 = follower.pathBuilder().addPath(
 
                             new BezierLine(
-                                    new Pose(24.055, 35.608),
+                                    new Pose(24, 35.608),
 
-//                                    new Pose(50.630, 12.591)
-                                    new Pose(50.630, 16.591)
+                                    new Pose(49.63, 13.591)
                             )
                     ).setConstantHeadingInterpolation(Math.toRadians(180))
 
                     .build();
 
+
             PickHPZone = follower.pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(50.630, 16.591),
-//                                    new Pose(50.630, 12.591),
-                                    new Pose(29.834, 20.287),
-                                    new Pose(15.845, 22.489),
-                                    new Pose(15.713, 8.751)
+                                    new Pose(49.63, 13.591),
+                                    new Pose(41.847, 23.084),
+                                    new Pose(16, 22.610)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(195))
+                    ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(210))
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(16, 22.610),
+                                    new Pose(33.815, 12.692),
+                                    new Pose(10.63, 10.365)
+                            )
+                    ).setLinearHeadingInterpolation(Math.toRadians(210), Math.toRadians(180))
 
                     .build();
 
+
             ShootHPZone = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(15.713, 8.751),
+                                    new Pose(10.63, 10.365),
 
-                                    new Pose(50.486, 12.481)
+                                    new Pose(50.63, 13.591)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(195), Math.toRadians(180))
+                    ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
 
                     .build();
 
             PickHPZone2 = follower.pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(50.630, 12.591),
-                                    new Pose(29.834, 20.287),
-                                    new Pose(15.845, 22.489),
-                                    new Pose(15.713, 8.751)
+                                    new Pose(50.63, 13.591),
+                                    new Pose(41.847, 23.084),
+                                    new Pose(16, 22.610)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(195))
+                    ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(210))
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(16, 22.610),
+                                    new Pose(33.815, 12.692),
+                                    new Pose(10.63, 10.365)
+                            )
+                    ).setLinearHeadingInterpolation(Math.toRadians(210), Math.toRadians(180))
 
                     .build();
 
             ShootHPZone2 = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(15.713, 8.751),
+                                    new Pose(10.63, 10.365),
 
-                                    new Pose(50.486, 12.481)
+                                    new Pose(50.63, 13.591)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(195), Math.toRadians(180))
+                    ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
 
                     .build();
 
             Park = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(50.486, 12.481),
+                                    new Pose(50.63, 13.591),
 
-                                    new Pose(50.812, 17)
+                                    new Pose(50.63, 24)
                             )
                     ).setConstantHeadingInterpolation(Math.toRadians(180))
 
                     .build();
-
         }
     }
+
+    int turretDiff = 0;
 
 
      ElapsedTime driveTime = new ElapsedTime();
     public pathStates autonomousPathUpdate() {
         switch(pathState){
             case SHOOT_PRE:
-                follower.followPath(paths.Preload);
+                follower.followPath(paths.Preload, true);
                 pathState = pathStates.PICK_SPIKE1;
                 state = States.REST;
                 break;
@@ -270,13 +376,14 @@ public class BLUEFAR extends OpMode {
                         state = States.SET;
                 }
                 if(state == States.INTAKE){
+                    turretDiff = -11;
                     follower.followPath(paths.PickSpike1);
                     pathState = pathStates.SHOOT_SPIKE1;
                 }
                 break;
             case SHOOT_SPIKE1:
                 if(!follower.isBusy()){
-                    follower.followPath(paths.ShootSpike1);
+                    follower.followPath(paths.ShootSpike1, true);
                     pathState = pathStates.PICK_HUMAN;
                     state = States.REST;
                 }
@@ -287,14 +394,15 @@ public class BLUEFAR extends OpMode {
                         state = States.SET;
                 }
                 if(state == States.INTAKE) {
+                    turretDiff = -11;
                     follower.followPath(paths.PickHPZone);
                     pathState = pathStates.SHOOT_HUMAN;
                     driveTime.reset();
                 }
                 break;
             case SHOOT_HUMAN:
-                if(!follower.isBusy() || driveTime.seconds() > 3){
-                    follower.followPath(paths.ShootHPZone);
+                if(!follower.isBusy() || driveTime.seconds() > 2.6){
+                    follower.followPath(paths.ShootHPZone, true);
                     pathState = pathStates.PICK_SPIKE2;
                     state = States.REST;
                 }
@@ -305,14 +413,15 @@ public class BLUEFAR extends OpMode {
                         state = States.SET;
                 }
                 if(state == States.INTAKE){
+                    turretDiff = -11;
                     follower.followPath(paths.PickHPZone2);
                     pathState = pathStates.SHOOT_SPIKE2;
                     driveTime.reset();
                 }
                 break;
             case SHOOT_SPIKE2:
-                if(!follower.isBusy() || driveTime.seconds() > 3){
-                    follower.followPath(paths.ShootHPZone2);
+                if(!follower.isBusy() || driveTime.seconds() > 2.6){
+                    follower.followPath(paths.ShootHPZone2, true);
                     pathState = pathStates.PARK;
                     state = States.REST;
                 }
@@ -389,7 +498,7 @@ public class BLUEFAR extends OpMode {
 
         double a = -2.99525;
         double b = 0.353539;
-        int turretTarget = (int)((targetAngle * a) + b);
+        int turretTarget = (int)(((targetAngle * a) + b) + turretDiff);
 
         int trueTarget = turretTarget;
 
@@ -477,7 +586,7 @@ public class BLUEFAR extends OpMode {
                 topServo.setPosition(0.45);
                 break;
             case SET:
-                if ((veloError <= 10 && Math.abs(turretError) <= 4))
+                if ((veloError <= 10 && Math.abs(turretError) <= 2) && follower.getVelocity().getMagnitude() <= 4)
                     state = States.FIRE;
 
                 intakeMotor.setPower(1);

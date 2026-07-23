@@ -29,7 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "BLUE-FAR", group = "Auto")
+@Autonomous(name = "RED-FAR", group = "Auto")
 @Configurable // Panels
 public class REDFAR extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
@@ -67,10 +67,10 @@ public class REDFAR extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(54, 8.6, Math.toRadians(90)));
+        follower.setStartingPose(new Pose(90, 8.6, Math.toRadians(90)));
 
         followerAim = Constants.createFollower(hardwareMap);
-        followerAim.setStartingPose(new Pose(54, 8.6, Math.toRadians(90)));
+        followerAim.setStartingPose(new Pose(90, 8.6, Math.toRadians(90)));
 
         paths = new Paths(follower);// Build paths
 
@@ -150,6 +150,10 @@ public class REDFAR extends OpMode {
 
         telemetry.addData("outTime", outTimer.milliseconds());
         telemetry.addData("thereTime", thereTimer.milliseconds());
+
+        telemetry.addLine();
+
+        telemetry.addData("Pose:", follower.getPose());
     }
 
 
@@ -191,59 +195,73 @@ public class REDFAR extends OpMode {
                             new BezierLine(
                                     new Pose(119.945, 35.608),
 
-                                    new Pose(93.37, 16.591)
+                                    new Pose(93.37, 13.591)
                             )
                     ).setConstantHeadingInterpolation(Math.toRadians(0))
 
                     .build();
 
+
             PickHPZone = follower.pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(93.37, 16.591),
-                                    new Pose(114.166, 20.287),
-                                    new Pose(128.155, 22.489),
-                                    new Pose(128.287, 8.751)
+                                    new Pose(93.370, 13.591),
+                                    new Pose(102.153, 23.084),
+                                    new Pose(128.006, 22.610)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-15))
+                    ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-30))
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(128.006, 22.610),
+                                    new Pose(110.185, 12.692),
+                                    new Pose(133.370, 10.365)
+                            )
+                    ).setLinearHeadingInterpolation(Math.toRadians(-30), Math.toRadians(0))
 
                     .build();
 
+
             ShootHPZone = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(128.287, 8.751),
+                                    new Pose(133.370, 10.365),
 
-                                    new Pose(93.514, 12.481)
+                                    new Pose(93.370, 13.591)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(-15), Math.toRadians(0))
+                    ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 
                     .build();
 
             PickHPZone2 = follower.pathBuilder().addPath(
                             new BezierCurve(
-                                    new Pose(93.37, 16.591),
-                                    new Pose(114.166, 20.287),
-                                    new Pose(128.155, 22.489),
-                                    new Pose(128.287, 8.751)
+                                    new Pose(93.370, 13.591),
+                                    new Pose(102.153, 23.084),
+                                    new Pose(128.006, 22.610)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-15))
+                    ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-30))
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(128.006, 22.610),
+                                    new Pose(110.185, 12.692),
+                                    new Pose(133.370, 10.365)
+                            )
+                    ).setLinearHeadingInterpolation(Math.toRadians(-30), Math.toRadians(0))
 
                     .build();
 
             ShootHPZone2 = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(128.287, 8.751),
+                                    new Pose(133.370, 10.365),
 
-                                    new Pose(93.514, 12.481)
+                                    new Pose(93.370, 13.591)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(-15), Math.toRadians(0))
+                    ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 
                     .build();
 
             Park = follower.pathBuilder().addPath(
                             new BezierLine(
-                                    new Pose(93.514, 12.481),
+                                    new Pose(93.370, 13.591),
 
-                                    new Pose(83.188, 17)
+                                    new Pose(93.188, 24)
                             )
                     ).setConstantHeadingInterpolation(Math.toRadians(0))
 
@@ -257,7 +275,7 @@ public class REDFAR extends OpMode {
     public pathStates autonomousPathUpdate() {
         switch(pathState){
             case SHOOT_PRE:
-                follower.followPath(paths.Preload);
+                follower.followPath(paths.Preload, true);
                 pathState = pathStates.PICK_SPIKE1;
                 state = States.REST;
                 break;
@@ -267,13 +285,14 @@ public class REDFAR extends OpMode {
                         state = States.SET;
                 }
                 if(state == States.INTAKE){
+                    turretDiff = 12;
                     follower.followPath(paths.PickSpike1);
                     pathState = pathStates.SHOOT_SPIKE1;
                 }
                 break;
             case SHOOT_SPIKE1:
                 if(!follower.isBusy()){
-                    follower.followPath(paths.ShootSpike1);
+                    follower.followPath(paths.ShootSpike1, true);
                     pathState = pathStates.PICK_HUMAN;
                     state = States.REST;
                 }
@@ -284,6 +303,7 @@ public class REDFAR extends OpMode {
                         state = States.SET;
                 }
                 if(state == States.INTAKE) {
+                    turretDiff = 12;
                     follower.followPath(paths.PickHPZone);
                     pathState = pathStates.SHOOT_HUMAN;
                     driveTime.reset();
@@ -291,7 +311,7 @@ public class REDFAR extends OpMode {
                 break;
             case SHOOT_HUMAN:
                 if(!follower.isBusy() || driveTime.seconds() > 3){
-                    follower.followPath(paths.ShootHPZone);
+                    follower.followPath(paths.ShootHPZone, true);
                     pathState = pathStates.PICK_SPIKE2;
                     state = States.REST;
                 }
@@ -302,6 +322,7 @@ public class REDFAR extends OpMode {
                         state = States.SET;
                 }
                 if(state == States.INTAKE){
+                    turretDiff = 12;
                     follower.followPath(paths.PickHPZone2);
                     pathState = pathStates.SHOOT_SPIKE2;
                     driveTime.reset();
@@ -309,7 +330,7 @@ public class REDFAR extends OpMode {
                 break;
             case SHOOT_SPIKE2:
                 if(!follower.isBusy() || driveTime.seconds() > 3){
-                    follower.followPath(paths.ShootHPZone2);
+                    follower.followPath(paths.ShootHPZone2, true);
                     pathState = pathStates.PARK;
                     state = States.REST;
                 }
@@ -350,7 +371,7 @@ public class REDFAR extends OpMode {
         if(results.getBotposeAvgDist() != 0) followerAim.setPose(current);;
     }
 
-    int goalX = 4;
+    int goalX = 140;
     int goalY = 140;
 
     int turretError = 0;
@@ -386,7 +407,7 @@ public class REDFAR extends OpMode {
 
         double a = -2.99525;
         double b = 0.353539;
-        int turretTarget = (int)((targetAngle * a) + b);
+        int turretTarget = (int)(((targetAngle * a) + b) + turretDiff);
 
         int trueTarget = turretTarget;
 
@@ -451,6 +472,8 @@ public class REDFAR extends OpMode {
 
     ElapsedTime popTimer = new ElapsedTime();
 
+    int turretDiff = 0;
+
     private void robotControl(){
         beamState = beamCheck();
 
@@ -474,7 +497,7 @@ public class REDFAR extends OpMode {
                 topServo.setPosition(0.45);
                 break;
             case SET:
-                if ((veloError <= 10 && Math.abs(turretError) <= 4))
+                if ((veloError <= 10 && Math.abs(turretError) <= 2) && follower.getVelocity().getMagnitude() <= 4)
                     state = States.FIRE;
 
                 intakeMotor.setPower(1);
