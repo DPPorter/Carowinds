@@ -43,7 +43,7 @@ public class turretAiming extends OpMode {
 
     public Servo popServo;
     public Servo hoodServo;
-    public Servo topServo;
+//    public Servo topServo;
 
     public Limelight3A limelight;
     public Servo underglow;
@@ -95,8 +95,8 @@ public class turretAiming extends OpMode {
         hoodServo = hardwareMap.get(Servo.class, "hoodServo");
         hoodServo.setDirection(Servo.Direction.REVERSE);
 
-        topServo = hardwareMap.get(Servo.class, "topServo");
-        topServo.setPosition(topServo.getPosition());
+//        topServo = hardwareMap.get(Servo.class, "topServo");
+//        topServo.setPosition(topServo.getPosition());
 
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");

@@ -43,7 +43,7 @@ public class testingVelocity extends OpMode {
 
     public Servo popServo;
     public Servo hoodServo;
-    public Servo topServo;
+//    public Servo topServo;
 
     public Limelight3A limelight;
     public Servo underglow;
@@ -99,8 +99,8 @@ public class testingVelocity extends OpMode {
         hoodServo = hardwareMap.get(Servo.class, "hoodServo");
         hoodServo.setDirection(Servo.Direction.REVERSE);
 
-        topServo = hardwareMap.get(Servo.class, "topServo");
-        topServo.setPosition(topServo.getPosition());
+//        topServo = hardwareMap.get(Servo.class, "topServo");
+//        topServo.setPosition(topServo.getPosition());
 
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -154,7 +154,7 @@ public class testingVelocity extends OpMode {
             intakeMotor.setPower(1);
             popperMotor.setPower(1);
 
-            topServo.setPosition(0.6);
+//            topServo.setPosition(0.6);
 
             if(gamepad1.leftBumperWasPressed()) popTimer.reset();
 
@@ -166,7 +166,7 @@ public class testingVelocity extends OpMode {
             intakeMotor.setPower(1);
             popperMotor.setPower(0.8);
 
-            topServo.setPosition(0.45);
+//            topServo.setPosition(0.45);
 
             if(gamepad1.leftBumperWasPressed()) popTimer.reset();
 

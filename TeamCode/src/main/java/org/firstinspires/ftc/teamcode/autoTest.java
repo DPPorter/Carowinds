@@ -53,7 +53,7 @@ public class autoTest extends OpMode {
 
     public Servo popServo;
     public Servo hoodServo;
-    public Servo topServo;
+//    public Servo topServo;
 
     public Limelight3A limelight;
     public Servo underglow;
@@ -111,8 +111,8 @@ public class autoTest extends OpMode {
         hoodServo = hardwareMap.get(Servo.class, "hoodServo");
         hoodServo.setDirection(Servo.Direction.REVERSE);
 
-        topServo = hardwareMap.get(Servo.class, "topServo");
-        topServo.setPosition(topServo.getPosition());
+//        topServo = hardwareMap.get(Servo.class, "topServo");
+//        topServo.setPosition(topServo.getPosition());
 
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -427,14 +427,14 @@ public class autoTest extends OpMode {
                 popperMotor.setPower(1);
 
                 popServo.setPosition(0.4);
-                topServo.setPosition(0.45);
+//                topServo.setPosition(0.45);
                 break;
             case REST:
                 intakeMotor.setPower(0.7);
                 popperMotor.setPower(0.9);
 
                 popServo.setPosition(0.4);
-                topServo.setPosition(0.45);
+//                topServo.setPosition(0.45);
                 break;
             case SET:
                 if ((veloError <= 10 && Math.abs(turretError) <= 4))
@@ -444,7 +444,7 @@ public class autoTest extends OpMode {
                 popperMotor.setPower(0.8);
 
                 popServo.setPosition(0.21);
-                topServo.setPosition(0.45);
+//                topServo.setPosition(0.45);
 
                 thereTimer.reset();
                 outTimer.reset();
@@ -454,7 +454,7 @@ public class autoTest extends OpMode {
                 intakeMotor.setPower(1);
                 popperMotor.setPower(1);
 
-                topServo.setPosition(0.65);
+//                topServo.setPosition(0.65);
 
                 if(beamState == 1) popTimer.reset();
                 else if(beamState == 0  && waitShot.milliseconds() > 1500) state = States.INTAKE;
@@ -469,7 +469,7 @@ public class autoTest extends OpMode {
 
                 flywheelMotor.setVelocity(0);
 
-                topServo.setPosition(0.45);
+//                topServo.setPosition(0.45);
                 popServo.setPosition(0.4);
                 break;
         }

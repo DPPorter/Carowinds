@@ -54,7 +54,7 @@ public class BLUEFAR extends OpMode {
 
     public Servo popServo;
     public Servo hoodServo;
-    public Servo topServo;
+//    public Servo topServo;
 
     public Limelight3A limelight;
     public Servo underglow;
@@ -115,8 +115,8 @@ public class BLUEFAR extends OpMode {
         hoodServo = hardwareMap.get(Servo.class, "hoodServo");
         hoodServo.setDirection(Servo.Direction.REVERSE);
 
-        topServo = hardwareMap.get(Servo.class, "topServo");
-        topServo.setPosition(topServo.getPosition());
+//        topServo = hardwareMap.get(Servo.class, "topServo");
+//        topServo.setPosition(topServo.getPosition());
 
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -563,8 +563,11 @@ public class BLUEFAR extends OpMode {
 
     ElapsedTime popTimer = new ElapsedTime();
 
+    int inBeamState = 0;
+
     private void robotControl(){
         beamState = beamCheck();
+        inBeamState = inBeamCheck();
 
 //        llReset();
         velocityControl();
@@ -572,18 +575,22 @@ public class BLUEFAR extends OpMode {
 
         switch(state){
             case INTAKE:
-                intakeMotor.setPower(1);
+                if(inBeamState == 0)
+                    intakeMotor.setPower(1);
+                else
+                    intakeMotor.setPower(0.3);
+
                 popperMotor.setPower(1);
 
                 popServo.setPosition(0.4);
-                topServo.setPosition(0.45);
+//                topServo.setPosition(0.45);
                 break;
             case REST:
                 intakeMotor.setPower(0.7);
                 popperMotor.setPower(0.9);
 
                 popServo.setPosition(0.4);
-                topServo.setPosition(0.45);
+//                topServo.setPosition(0.45);
                 break;
             case SET:
                 if ((veloError <= 10 && Math.abs(turretError) <= 2) && follower.getVelocity().getMagnitude() <= 4)
@@ -592,8 +599,9 @@ public class BLUEFAR extends OpMode {
                 intakeMotor.setPower(1);
                 popperMotor.setPower(0.8);
 
-                popServo.setPosition(0.21);
-                topServo.setPosition(0.45);
+//                popServo.setPosition(0.21);
+                popServo.setPosition(0.4);
+//                topServo.setPosition(0.45);
 
                 thereTimer.reset();
                 outTimer.reset();
@@ -603,7 +611,7 @@ public class BLUEFAR extends OpMode {
                 intakeMotor.setPower(1);
                 popperMotor.setPower(1);
 
-                topServo.setPosition(0.65);
+//                topServo.setPosition(0.65);
 
                 if(beamState == 1) popTimer.reset();
                 else if(beamState == 0  && waitShot.milliseconds() > 1500) state = States.INTAKE;
@@ -618,7 +626,7 @@ public class BLUEFAR extends OpMode {
 
                 flywheelMotor.setVelocity(0);
 
-                topServo.setPosition(0.45);
+//                topServo.setPosition(0.45);
                 popServo.setPosition(0.4);
                 break;
         }
@@ -653,6 +661,27 @@ public class BLUEFAR extends OpMode {
             return 0;
         else
             return 2;
+    }
+
+
+    // 0: nothing
+    // 1: stop
+
+    ElapsedTime inThereTimer = new ElapsedTime();
+    private int inBeamCheck(){
+        boolean objThere = false;
+
+        int count = 0;
+        for(int i = 9; i >= 0; i --)
+            if(intakeBeam.getState()) count ++;
+        if(count >= 4) objThere = true;
+
+        if(!objThere) inThereTimer.reset();
+
+        if(inThereTimer.milliseconds() > 300)
+            return 1;
+        else
+            return 0;
     }
 
 }
